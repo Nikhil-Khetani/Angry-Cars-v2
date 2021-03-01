@@ -6,12 +6,13 @@ using Newtonsoft.Json.Linq;
 public class GameLogic : MonoBehaviour
 {   public GameObject myCube;
     CubeMovement cube_movement_script;
-    Vector3 movement;
+
+    
     // Start is called before the first frame update
     void Start()
     {
         cube_movement_script = myCube.GetComponent<CubeMovement>();
-        movement = new Vector3(0,0,1);
+
     }
 
     void Awake(){
@@ -21,16 +22,29 @@ public class GameLogic : MonoBehaviour
     void OnMessage(int fromDeviceID, JToken data){
         Debug.Log("message from" + fromDeviceID + ", data:" + data);
         if (data["move"] != null  && data["move"].ToString().Equals("-2")){
-            cube_movement_script.Move(movement);
-            Debug.Log("cube pos") ;
+            cube_movement_script.TurnLeft();
+            Debug.Log("TurnLeft") ;
         }
+        if (data["move"] != null  && data["move"].ToString().Equals("-1")){
+            cube_movement_script.StopLeft();
+            Debug.Log("TurnLeft") ;
+        }
+        if (data["move"] != null  && data["move"].ToString().Equals("2")){
+            cube_movement_script.TurnRight();
+            Debug.Log("TurnRight") ;
+        }
+        if (data["move"] != null  && data["move"].ToString().Equals("1")){
+            cube_movement_script.StopRight();
+            Debug.Log("TurnRight") ;
+        }
+
     }
     
     void OnDestroy(){
 
         //unregister events
         if (AirConsole.instance != null){
-                AirConsole.instance.onMessage -= OnMessage;
+            AirConsole.instance.onMessage -= OnMessage;
         }
     }
     
