@@ -1,2 +1,2 @@
 # Angry-Cars-v2
-A Unity project using the AirConsole API for a survival/racing game.
+A Unity project using the AirConsole API for a racing game.
