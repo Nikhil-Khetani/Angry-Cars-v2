@@ -12,6 +12,7 @@ public class CubeMovement : MonoBehaviour
     float xrot;
     float zrot;
     float selfRightingTorque = 1.0f;
+    public Rigidbody rb;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +21,8 @@ public class CubeMovement : MonoBehaviour
         right = 0;
         xrot = 0.0f;
         zrot = 0.0f;
+        Debug.Log(rb.centerOfMass);
+        rb.centerOfMass += new Vector3(0,-0.7f,0);
         
     }
     
@@ -41,11 +44,17 @@ public class CubeMovement : MonoBehaviour
     {
         
         transform.position += transform.forward * vel;
-
-        transform.Rotate(new Vector3 (0, (right-left)*5, 0));
+        //Selfright();
+        transform.Rotate(new Vector3 (0, (right-left), 0));
         
         
 
         
+    }
+
+    void Selfright()
+    {
+        var pointUp = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(transform.forward), Time.deltaTime * 400);
+        transform.rotation = pointUp;
     }
 }
