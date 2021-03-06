@@ -10,10 +10,16 @@ public class GameLogic2 : MonoBehaviour {
 
 	public Dictionary<int, Player_Movement> players = new Dictionary<int, Player_Movement> (); 
 
+	private Vector3 camera_pos;
+	private Vector3 camera_offset;
+
+	void start(){
+		camera_offset = new Vector3 (-30,60,-30);
+	}
 	void Awake () {
 		AirConsole.instance.onMessage += OnMessage;		
 		AirConsole.instance.onReady += OnReady;		
-		AirConsole.instance.onConnect += OnConnect;		
+		AirConsole.instance.onConnect += OnConnect;	
 	}
 
 	void OnReady(string code){
@@ -44,9 +50,9 @@ public class GameLogic2 : MonoBehaviour {
 		Debug.Log ("message: " + data);
 
 		//When I get a message, I check if it's from any of the devices stored in my device Id dictionary
-		if (players.ContainsKey (from) && data["action"] != null) {
+		if (players.ContainsKey (from) && data["move"] != null) {
 			//I forward the command to the relevant player script, assigned by device ID
-			players [from].Move(data["action"].ToString());
+			players [from].Move(data["move"].ToString());
 		}
 	}
 
@@ -56,5 +62,17 @@ public class GameLogic2 : MonoBehaviour {
 			AirConsole.instance.onReady -= OnReady;		
 			AirConsole.instance.onConnect -= OnConnect;		
 		}
+	}
+
+	void FixedUpdate(){
+		camera_pos = new Vector3(0,0,0);
+		foreach (var player in players)
+		{
+			camera_pos+=new Vector3 (player.Value.getx(),player.Value.gety(),player.Value.getz());
+			camera_pos/=players.Count;
+			
+		}
+		camera_pos+= camera_offset;
+		Camera.main.transform.position = camera_pos;
 	}
 }

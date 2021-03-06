@@ -16,6 +16,7 @@ public class Player_Movement : MonoBehaviour
     void Start()
     {
       //rb = GetComponent<Rigidbody>();   
+      rb.centerOfMass += new Vector3(0,-0.7f,0);
     }
     public void Move(string data){
         switch(data){
@@ -25,10 +26,10 @@ public class Player_Movement : MonoBehaviour
 		case "-2":
 			left = 1;
 			break;
-		case "-1":
+		case "1":
 			right = 0;
 			break;
-		case "1":
+		case "-1":
 			left = 0;
 			break;
         }
@@ -43,5 +44,18 @@ public class Player_Movement : MonoBehaviour
     void FixedUpdate(){
         transform.position += transform.forward * vel;
         transform.Rotate(new Vector3 (0, (right-left), 0));
+        if (transform.position.y<-100){
+            transform.position = new Vector3(10,10,20);
+        }
+    }
+
+    public float getx(){
+        return transform.position.x;
+    }
+    public float gety(){
+        return transform.position.y;
+    }
+    public float getz(){
+        return transform.position.z;
     }
 }
