@@ -19,7 +19,7 @@ public class GameLogic2 : MonoBehaviour {
 		AirConsole.instance.onMessage += OnMessage;		
 		AirConsole.instance.onReady += OnReady;		
 		AirConsole.instance.onConnect += OnConnect;	
-		camera_offset = new Vector3 (-30,50,-30);
+		camera_offset = new Vector3 (-30,30,-30);
 	}
 
 	void OnReady(string code){

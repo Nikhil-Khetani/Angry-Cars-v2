@@ -37,7 +37,6 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\AirConsole\CubeMovement.cs" />
-     <Compile Include="Assets\AirConsole\GameLogic.cs" />
      <Compile Include="Assets\AirConsole\GameLogic2.cs" />
      <Compile Include="Assets\AirConsole\Player_Movement.cs" />
      <Compile Include="Assets\AirConsole\examples\basic\ExampleBasicLogic.cs" />

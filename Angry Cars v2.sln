@@ -5,9 +5,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathCreator", "PathCreator.csproj", "{00028aab-c805-816e-c905-8c3bc818790c}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{efccc2f3-7468-6bbf-dc15-1cdf9a197ace}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathCreatorEditor", "PathCreatorEditor.csproj", "{0ae22dce-9ece-bc7e-ca70-7e15bbc341e9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{efccc2f3-7468-6bbf-dc15-1cdf9a197ace}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,10 +18,10 @@ Global
 		{0249f972-229d-5823-c332-2074d6c8512f}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00028aab-c805-816e-c905-8c3bc818790c}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{00028aab-c805-816e-c905-8c3bc818790c}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{efccc2f3-7468-6bbf-dc15-1cdf9a197ace}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{efccc2f3-7468-6bbf-dc15-1cdf9a197ace}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0ae22dce-9ece-bc7e-ca70-7e15bbc341e9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0ae22dce-9ece-bc7e-ca70-7e15bbc341e9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{efccc2f3-7468-6bbf-dc15-1cdf9a197ace}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{efccc2f3-7468-6bbf-dc15-1cdf9a197ace}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
