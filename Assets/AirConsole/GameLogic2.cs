@@ -9,17 +9,17 @@ public class GameLogic2 : MonoBehaviour {
 	public GameObject playerPrefab;
 
 	public Dictionary<int, Player_Movement> players = new Dictionary<int, Player_Movement> (); 
+	public Dictionary<int, GameObject> playerObjects = new Dictionary<int, GameObject> (); 
 
 	private Vector3 camera_pos;
 	private Vector3 camera_offset;
 
-	void start(){
-		camera_offset = new Vector3 (-30,60,-30);
-	}
+
 	void Awake () {
 		AirConsole.instance.onMessage += OnMessage;		
 		AirConsole.instance.onReady += OnReady;		
 		AirConsole.instance.onConnect += OnConnect;	
+		camera_offset = new Vector3 (-30,50,-30);
 	}
 
 	void OnReady(string code){
@@ -34,6 +34,9 @@ public class GameLogic2 : MonoBehaviour {
 	void OnConnect (int device){
 		AddNewPlayer (device);
 	}
+	void OnDisconnect (int device){
+		RemovePlayer(device);
+	}
 
 	private void AddNewPlayer(int deviceID){
 
@@ -42,8 +45,13 @@ public class GameLogic2 : MonoBehaviour {
 		}
 
 		//Instantiate player prefab, store device id + player script in a dictionary
-		GameObject newPlayer = Instantiate (playerPrefab, transform.position, transform.rotation) as GameObject;
+		GameObject newPlayer = Instantiate (playerPrefab, transform.position+= new Vector3(2*deviceID, 0,-2*deviceID), transform.rotation) as GameObject;
+		playerObjects.Add(deviceID, newPlayer);
 		players.Add(deviceID, newPlayer.GetComponent<Player_Movement>());
+	}
+	
+	private void RemovePlayer(int deviceID){
+		Destroy(playerObjects[deviceID], 0f);
 	}
 
 	void OnMessage (int from, JToken data){
@@ -65,14 +73,18 @@ public class GameLogic2 : MonoBehaviour {
 	}
 
 	void FixedUpdate(){
+		if (players.Count<1){
+			return;
+		}
 		camera_pos = new Vector3(0,0,0);
 		foreach (var player in players)
 		{
-			camera_pos+=new Vector3 (player.Value.getx(),player.Value.gety(),player.Value.getz());
-			camera_pos/=players.Count;
-			
+			camera_pos+=new Vector3 (player.Value.getx(),player.Value.gety(),player.Value.getz());	
 		}
-		camera_pos+= camera_offset;
+		camera_pos/=players.Count;
+		camera_pos = camera_pos+camera_offset;
+
+		Debug.Log(camera_pos);
 		Camera.main.transform.position = camera_pos;
 	}
 }
