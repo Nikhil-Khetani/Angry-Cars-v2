@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PathCreation;
 
 public class Player_Movement : MonoBehaviour
 {
@@ -12,9 +13,13 @@ public class Player_Movement : MonoBehaviour
     float zrot;
     float selfRightingTorque = 1.0f;
     public Rigidbody rb;
+    public PathCreator pathCreator;
+    private float pathPosition;
+    public float maxDistanceFromPath=50.0f;
     // Start is called before the first frame update
     void Start()
     {
+      pathCreator = GameObject.Find("Path").GetComponent<PathCreator>();
       //rb = GetComponent<Rigidbody>();   
       rb.centerOfMass += new Vector3(0,-0.7f,0);
     }
@@ -49,6 +54,14 @@ public class Player_Movement : MonoBehaviour
         }
     }
 
+
+    public void explode(){
+        Debug.Log("Exploded");
+    }
+
+    public float getPlayerDistanceAlongPath(){
+        return pathCreator.path.GetClosestDistanceAlongPath(transform.position);
+    }
     public float getx(){
         return transform.position.x;
     }
@@ -58,4 +71,5 @@ public class Player_Movement : MonoBehaviour
     public float getz(){
         return transform.position.z;
     }
+
 }

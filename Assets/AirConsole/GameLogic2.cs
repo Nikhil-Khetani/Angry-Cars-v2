@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using NDream.AirConsole;
 using Newtonsoft.Json.Linq;
+using PathCreation;
 
 public class GameLogic2 : MonoBehaviour {
 
@@ -13,13 +14,22 @@ public class GameLogic2 : MonoBehaviour {
 
 	private Vector3 camera_pos;
 	private Vector3 camera_offset;
+	public Vector3 camera_y_offset;
+
+	public PathCreator pathCreator;
+	private float prevFirstDistanceAlongPath;
+	private float FirstDistanceAlongPath;
+	private float playerDist;
+	public float maxDistanceFromPath;
+	private Vector3 pathDirection;
 
 
 	void Awake () {
 		AirConsole.instance.onMessage += OnMessage;		
 		AirConsole.instance.onReady += OnReady;		
 		AirConsole.instance.onConnect += OnConnect;	
-		camera_offset = new Vector3 (-30,30,-30);
+		camera_y_offset = new Vector3 (0,30,0);
+		pathCreator = GameObject.Find("Path").GetComponent<PathCreator>();
 	}
 
 	void OnReady(string code){
@@ -76,15 +86,25 @@ public class GameLogic2 : MonoBehaviour {
 		if (players.Count<1){
 			return;
 		}
-		camera_pos = new Vector3(0,0,0);
 		foreach (var player in players)
 		{
-			camera_pos+=new Vector3 (player.Value.getx(),player.Value.gety(),player.Value.getz());	
-		}
-		camera_pos/=players.Count;
-		camera_pos = camera_pos+camera_offset;
+			prevFirstDistanceAlongPath = FirstDistanceAlongPath;
+			playerDist = player.Value.getPlayerDistanceAlongPath();
+			if(FirstDistanceAlongPath < playerDist){
+				FirstDistanceAlongPath = playerDist;
+			}
+			else if(prevFirstDistanceAlongPath - playerDist>maxDistanceFromPath){
+				player.Value.explode();
+			}
 
-		Debug.Log(camera_pos);
+		}
+		pathDirection = pathCreator.path.GetDirectionAtDistance(prevFirstDistanceAlongPath);
+		camera_offset = -20*pathDirection + camera_y_offset;
+		camera_pos = pathCreator.path.GetPointAtDistance(prevFirstDistanceAlongPath) + camera_offset;
+
+		Camera.main.transform.rotation = Quaternion.LookRotation(pathDirection+ new Vector3(0,-1,0));
 		Camera.main.transform.position = camera_pos;
+
+
 	}
 }
