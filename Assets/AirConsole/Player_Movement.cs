@@ -6,22 +6,27 @@ using PathCreation;
 public class Player_Movement : MonoBehaviour
 {
     Vector3 movement;
-    float vel=0.1f;
+    public float vel=0.1f;
     int left;
     int right;
     float xrot;
     float zrot;
-    float selfRightingTorque = 1.0f;
     public Rigidbody rb;
     public PathCreator pathCreator;
     private float pathPosition;
-    public float maxDistanceFromPath=50.0f;
+    private float prevDist;
+    private float newDist;
+    private int lap;
     // Start is called before the first frame update
     void Start()
     {
       pathCreator = GameObject.Find("Path").GetComponent<PathCreator>();
       //rb = GetComponent<Rigidbody>();   
-      rb.centerOfMass += new Vector3(0,-0.7f,0);
+      rb.centerOfMass += new Vector3(0,-0.4f,0);
+      lap=0;
+    }
+    public void initialise(float velocity){
+        vel = velocity;
     }
     public void Move(string data){
         switch(data){
@@ -47,7 +52,17 @@ public class Player_Movement : MonoBehaviour
         
     }
     void FixedUpdate(){
-        transform.position += transform.forward * vel;
+        if(left==1 && right==1){
+            rb.AddForce(transform.forward*-0.1f);
+        }
+        else{
+        rb.AddForce(transform.forward * vel);
+        Vector3 localVelocity = transform.InverseTransformDirection(rb.velocity);
+        localVelocity.x = 0;
+        rb.velocity= transform.TransformDirection(localVelocity);
+        }
+
+
         transform.Rotate(new Vector3 (0, (right-left), 0));
         if (transform.position.y<-100){
             transform.position = new Vector3(10,10,20);
@@ -60,7 +75,21 @@ public class Player_Movement : MonoBehaviour
     }
 
     public float getPlayerDistanceAlongPath(){
-        return pathCreator.path.GetClosestDistanceAlongPath(transform.position);
+        newDist = pathCreator.path.GetClosestDistanceAlongPath(transform.position);
+        if(newDist <= 20 && prevDist >= pathCreator.path.GetLength()-20){
+            lap+=1;
+        }
+        else if (prevDist <= 20 && newDist >= pathCreator.path.GetLength()-20){
+            lap-=1;
+        }
+        prevDist = newDist;
+        return newDist;
+    }
+
+
+
+    public int getLap(){
+        return lap;
     }
     public float getx(){
         return transform.position.x;

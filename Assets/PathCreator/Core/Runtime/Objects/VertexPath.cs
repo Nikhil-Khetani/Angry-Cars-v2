@@ -243,6 +243,9 @@ namespace PathCreation {
             TimeOnPathData data = CalculateClosestPointOnPathData (worldPoint);
             return Mathf.Lerp (cumulativeLengthAtEachVertex[data.previousIndex], cumulativeLengthAtEachVertex[data.nextIndex], data.percentBetweenIndices);
         }
+        public float GetLength(){
+            return length;
+        }
 
         #endregion
 

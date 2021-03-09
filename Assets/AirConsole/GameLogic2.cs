@@ -20,8 +20,22 @@ public class GameLogic2 : MonoBehaviour {
 	private float prevFirstDistanceAlongPath;
 	private float FirstDistanceAlongPath;
 	private float playerDist;
-	public float maxDistanceFromPath;
+	public float maxDistanceBehind = 100;
 	private Vector3 pathDirection;
+	private float pathLength;
+	private int firstPlayerLap;
+	private int prevFirstPlayerLap;
+	private int i=0;
+
+	private List<Material> CarMats = new List<Material> ();
+	private Material CarMat;
+
+	private GameObject myPath;
+
+	public float CarVelocity=0.1f;
+	[Range (0, 10.0f)]
+	public float maxDistanceFromPath = 20.0f;
+
 
 
 	void Awake () {
@@ -29,7 +43,15 @@ public class GameLogic2 : MonoBehaviour {
 		AirConsole.instance.onReady += OnReady;		
 		AirConsole.instance.onConnect += OnConnect;	
 		camera_y_offset = new Vector3 (0,30,0);
-		pathCreator = GameObject.Find("Path").GetComponent<PathCreator>();
+		myPath = GameObject.Find("Path");
+		pathCreator = myPath.GetComponent<PathCreator>();
+		pathLength = pathCreator.path.GetLength();
+		
+		for(i=0; i<9; i++){
+			CarMat = Resources.Load<Material>("Car"+ i.ToString());
+			CarMats.Add(CarMat);
+		}
+
 	}
 
 	void OnReady(string code){
@@ -56,8 +78,11 @@ public class GameLogic2 : MonoBehaviour {
 
 		//Instantiate player prefab, store device id + player script in a dictionary
 		GameObject newPlayer = Instantiate (playerPrefab, transform.position+= new Vector3(2*deviceID, 0,-2*deviceID), transform.rotation) as GameObject;
+		newPlayer.GetComponent<Renderer>().material = CarMats[deviceID];
+		newPlayer.GetComponent<Player_Movement>().initialise(CarVelocity);
 		playerObjects.Add(deviceID, newPlayer);
 		players.Add(deviceID, newPlayer.GetComponent<Player_Movement>());
+		
 	}
 	
 	private void RemovePlayer(int deviceID){
@@ -89,11 +114,16 @@ public class GameLogic2 : MonoBehaviour {
 		foreach (var player in players)
 		{
 			prevFirstDistanceAlongPath = FirstDistanceAlongPath;
+			prevFirstPlayerLap = firstPlayerLap;
+
 			playerDist = player.Value.getPlayerDistanceAlongPath();
-			if(FirstDistanceAlongPath < playerDist){
+
+			if(FirstDistanceAlongPath + pathLength *firstPlayerLap < playerDist+ pathLength * player.Value.getLap()){
 				FirstDistanceAlongPath = playerDist;
+				firstPlayerLap = player.Value.getLap();
 			}
-			else if(prevFirstDistanceAlongPath - playerDist>maxDistanceFromPath){
+
+			else if(prevFirstDistanceAlongPath - playerDist>maxDistanceBehind){
 				player.Value.explode();
 			}
 
