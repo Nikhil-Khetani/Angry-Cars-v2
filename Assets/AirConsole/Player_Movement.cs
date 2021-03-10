@@ -17,6 +17,8 @@ public class Player_Movement : MonoBehaviour
     private float prevDist;
     private float newDist;
     private int lap;
+    private bool state;
+    //1=normal, 2=frozen, 3=exploded
     // Start is called before the first frame update
     void Start()
     {
