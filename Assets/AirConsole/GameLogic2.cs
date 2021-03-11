@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using NDream.AirConsole;
 using Newtonsoft.Json.Linq;
 using PathCreation;
@@ -40,6 +41,7 @@ public class GameLogic2 : MonoBehaviour {
 	public float CarVelocity=0.1f;
 	[Range (0, 50.0f)]
 	public float maxDistanceFromPath=20.0f;
+
 
 
 
@@ -225,4 +227,16 @@ public class GameLogic2 : MonoBehaviour {
 			Debug.Log("Go from player");
 		}
     }
+
+	public Text myText;
+	void display(){
+		foreach (var player in players)
+		{
+			
+			if (player.Key==1){
+				myText.GetComponent<Text>().text = player.Value.getPoints().ToString();
+
+			}
+		}
+	}
 }

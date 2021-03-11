@@ -142,6 +142,9 @@ public class Player_Movement : MonoBehaviour
     public bool checkIfExploded(){
         return driving;
     }
+    public int getPoints(){
+        return points;
+    }
 
     public int getLap(){
         return lap;
