@@ -234,7 +234,7 @@ public class GameLogic2 : MonoBehaviour {
 		{
 			
 			if (player.Key==1){
-				myText.GetComponent<Text>().text = player.Value.getPoints().ToString();
+				myText.text = player.Value.getPoints().ToString();
 			}
 		}
 	}
