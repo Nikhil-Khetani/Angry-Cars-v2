@@ -6,3 +6,7 @@ All main game functions are completed but the UI and game menu are yet to be don
 # Built with
 - VS Code
 - Unity
+- C#
+- HTML
+- CSS
+- Javascript
